@@ -74,15 +74,18 @@ def Find_Max_Path(G,s,t):
         for j in neighbours:
           if j not in vis:
             edges += [[i,j]]
+        
 
       cap = 0
       for i in edges:
         if cap < Weights[i[0],i[1]]:
           cap = Weights[i[0],i[1]]
           Max_edge = i
-          v = Max_edge[0]
-          w = Max_edge[1]
-      table[w] = [min(table[v][0],Weights[v,w]),table[v][1]+[w]]
+      if cap == 0:
+        break 
+      v = Max_edge[0]
+      w = Max_edge[1]
+      table[w] = [min(table[v][0],Weights[(v,w)]),table[v][1]+[w]]
       vis.append(w)
 
       if table[t][0] != 0:
@@ -95,10 +98,6 @@ def FMF_ele(G,s,t):
     
   F = nx.DiGraph()    # Flow fraph   
   Max_flow = 0
-  
-#  if is_input_correct(G,s,t) != True:
-#    return None
-#  else:
       
   R = G.copy()    # Residule Graph 
   for (u,v) in G.edges():
@@ -119,8 +118,7 @@ def FMF_ele(G,s,t):
       Min_cut = []
       for i in Find_Max_Path(R,s,t):
         if Find_Max_Path(R,s,t)[i][1] != []:
-          Min_cut.append(i)
-#      nx.draw(F,Pos, with_labels=True,  arrows = True)    
+          Min_cut.append(i)    
       return [ Max_flow , Min_cut ]
   
 
@@ -134,7 +132,6 @@ def FMF_set(G,s,t):
         edges.append((j,'T',inf))
         
     G.add_weighted_edges_from(edges)
-    
     return FMF_ele(G,'S','T')
   
 
@@ -180,8 +177,6 @@ def Solve(G,Source,Sink):
   is_input_correct(G,s,t)
   return Find_BN(G,s,t)
 
-#Max_flow(G,1,'t')
+Max_flow(G,{'s',1},{6,'t'})
 
-FMF_ele(G,4,'t')
-
-#Solve(G,'s','t')
+#FMF_ele(G,4,5)
