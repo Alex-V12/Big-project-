@@ -177,10 +177,10 @@ def Max_flow(G,s,t):
 
 def Find_cut(G,Return):
   edges = list(G.edges())
-  Min_cut=[]
+  Min_cut= set()
   for i in edges:  
     if i[0] in Return[1] and i[1] not in Return[1]:
-      Min_cut.append(i)
+      Min_cut.add(i)
   return Min_cut
 
 def Find_BN(G,s,t):
@@ -192,6 +192,7 @@ def Find_BN(G,s,t):
     Flow.add_weighted_edges_from([i+(attempt_1[2][i],)]) 
 
   min_cut = Find_cut(G,attempt_1)
+  print(min_cut)
   for i in min_cut:
     i+=(inf,)
     R.add_weighted_edges_from([i])
@@ -210,8 +211,18 @@ def Find_BN(G,s,t):
     Inc_flow.add_weighted_edges_from([i+(attempt_2[2][i],)])
   print(nx.get_edge_attributes(Inc_flow,'weight'))
 
-  Improvments = []
-  :
+  Improvments = {}
+  while type(Find_Max_Path(R,s,t)) == list:
+    A = set()
+    for i in range(len(Find_Max_Path(R,s,t)[1])):
+      v = Find_Max_Path(R,s,t)[1][i]
+      w = Find_Max_Path(R,s,t)[1][i+1]
+      if (v,w) in min_cut:
+        A.add((v,w))
+    Improvments[A] = Find_Max_Path(R,s,t)[0]
+  return Improvments
+
+  
 
 
 
@@ -227,4 +238,4 @@ def Solve(G,Source,Sink):
 
 
 
-Find_BN(G,'s','t')
+Find_BN(G,{'s',1},'t')
