@@ -184,6 +184,10 @@ def Find_cut(G,Return):
   return Min_cut
 
 def Find_BN(G,s,t):
+  if 'S' in G.nodes():
+    s = 'S'
+    t = 'T'
+
   R = G.copy()
 
   attempt_1 = Max_flow(G,s,t)
@@ -209,25 +213,23 @@ def Find_BN(G,s,t):
   Inc_flow = nx.DiGraph()
   for i in attempt_2[2]:
     Inc_flow.add_weighted_edges_from([i+(attempt_2[2][i],)])
-  print(nx.get_edge_attributes(Inc_flow,'weight'))
 
-  Improvments = {}
-  while type(Find_Max_Path(R,s,t)) == list:
+  Improvments = []
+  while type(Find_Max_Path(Inc_flow,s,t)) == list:
+#    print(nx.get_edge_attributes(Inc_flow,'weight'))
     A = set()
-    for i in range(len(Find_Max_Path(R,s,t)[1])):
-      v = Find_Max_Path(R,s,t)[1][i]
-      w = Find_Max_Path(R,s,t)[1][i+1]
+    for i in range(len(Find_Max_Path(Inc_flow,s,t)[1])-1):
+      print(Find_Max_Path(Inc_flow,s,t)[1],'hello')
+      v = Find_Max_Path(Inc_flow,s,t)[1][i]
+      w = Find_Max_Path(Inc_flow,s,t)[1][i+1]
       if (v,w) in min_cut:
         A.add((v,w))
-    Improvments[A] = Find_Max_Path(R,s,t)[0]
+      Improvments.append(A.add(Find_Max_Path(Inc_flow,s,t)[0]))
+      if Inc_flow[v][w] == Find_Max_Path(Inc_flow,s,t)[0]:
+        Inc_flow.remove_edge(v,w)
+      else:
+        Inc_flow[v][w]['weight'] -= Find_Max_Path(Inc_flow,s,t)[0]
   return Improvments
-
-  
-
-
-
-
-  return (1)
 
 def Solve(G,Source,Sink):
   s = Source
@@ -238,4 +240,4 @@ def Solve(G,Source,Sink):
 
 
 
-Find_BN(G,{'s',1},'t')
+Find_BN(G,'s','t')
