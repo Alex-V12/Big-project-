@@ -237,10 +237,10 @@ def Find_BN(G,s,t):
      Inc_flow.add_weighted_edges_from([i+(attempt_2[2][i],)])
   
   Improvments = [{attempt_1[0]}]
-  
+  BREAK = set() 
   while isinstance(Find_Max_Path(Inc_flow,s,t), list):
      result = Find_Max_Path(Inc_flow,s,t)
-    
+     BREAK.add(result[0]) 
      A = set()
      for i in range(len(result[1])-1):
        v = result[1][i]
@@ -266,9 +266,11 @@ def Find_BN(G,s,t):
      #             if A in j and (len(A)+1) == len(j):
      #                 for k in range(len(Improvments[j])):
      #                     if isinstance(Improvments[j][k],int):
-     #                         Improvments[j][k] += result[0]
-                             
-     
+     #                         Improvments[j][k] += result[0] 
+
+  if BREAK == {inf}:
+    return [{attempt_1[0]}, 'No bottle necks found']  
+
   return Improvments
 
 
@@ -284,10 +286,12 @@ def Solve(G,Source,Sink):
 
 G = nx.DiGraph()
 G.add_weighted_edges_from([
-    ('s',1,16+1+15),('s',2,13+6+5+6),
-    (1,3,12+1+7+1+15),(2,1,4+6),(2,4,14+6+15),(3,2,9),(4,3,7),
-    (3,5,20+7),(4,5,4+5+1+15),(5,6,9+1),
-    (6,'t',20),(4,6,4+6),(5,'t',20+7+12)])
+    ('s',1,16),('s',2,13),
+    (1,3,12),
+     (2,1,4),(2,4,14),(3,2,9),(4,3,7),
+    (3,5,20),(4,5,4),(5,6,9),
+    (6,'t',20),(4,6,4),(5,'t',20)
+    ])
 
 layers = [[None,'s',None],[1,None,2],[3,None,4],[5,None,6],[None,'t',None]]
 Pos = {}
@@ -346,3 +350,6 @@ nx.draw(H, Pos, with_labels=True, node_size=700, node_color='lightblue', arrows=
 nx.draw_networkx_edge_labels(H, Pos, edge_labels=edge_labels)
 
 plt.show()
+
+
+Solve(G,'s','t')
