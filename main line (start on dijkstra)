@@ -277,7 +277,7 @@ def Find_BN(G,s,t):
 
 # Combining checkers and solvers into one function  
 
-def Solve(G,Source,Sink):
+def Solve_multi(G,Source,Sink):
   is_input_correct(G,Source,Sink)
   return Find_BN(G,Source,Sink)
 
@@ -323,11 +323,6 @@ def Solve_single(G,Source,Sink):
             Improvements.append({attempt_2[0],i})
             R.remove_edge(i[0],i[1])
   return Improvements
-
-  
-
-
-
 
 
 
