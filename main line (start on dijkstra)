@@ -427,5 +427,6 @@ nx.draw_networkx_edge_labels(B, Pos, edge_labels=edge_labels)
 
 plt.show()
 
-
-Solve_single(B,0,1)
+# EXAMPLES
+#Solve_single(B,0,1)
+#Solve_multi(H,'s','t')
