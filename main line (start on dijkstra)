@@ -186,6 +186,8 @@ def Find_BN(G,s,t):
 
   R = G.copy()
   attempt_1 = Max_flow(G,s,t)
+  if attempt_1[0] == 0:
+    return 'No flow has been found'
 
   Flow = nx.DiGraph()
   for i in attempt_1[2]:
@@ -289,6 +291,8 @@ def Solve_single(G,Source,Sink):
 
   R = G.copy()
   attempt_1 = Max_flow(G,s,t)
+  if attempt_1[0] == 0:
+    return 'No flow has been found'
 
   Flow = nx.DiGraph()
   for i in attempt_1[2]:
@@ -319,9 +323,19 @@ def Solve_single(G,Source,Sink):
         if R[i[0]][i[1]]['weight'] == 0:  # The definition of a bottleneck
             i+=(inf,)
             R.add_weighted_edges_from([i])
-            attempt_2 = Max_flow(R,'s','t')
+            attempt_2 = Max_flow(R,s,t)
             Improvements.append({attempt_2[0],(i[0],i[1])})
             R.remove_edge(i[0],i[1])      # As we are looking at the improvment given by this single edge we delete the edge after looking at it  
+
+  BREAK = []
+  for i in Improvements:
+    if type(i) == set:
+      if 0 in i:
+        BREAK.append(i)
+  for i in BREAK:
+      Improvements.remove(i)
+  if len(Improvements) ==1:
+    return [{attempt_1[0]},'No bottle necks found']
   return Improvements
 
 
@@ -387,10 +401,31 @@ for i, layer in enumerate(layers):
 edge_labels = nx.get_edge_attributes(H,'weight')
 
 
-#nx.draw(H, Pos, with_labels=True, node_size=700, node_color='lightblue', arrows=True)
-#nx.draw_networkx_edge_labels(H, Pos, edge_labels=edge_labels)
+nx.draw(H, Pos, with_labels=True, node_size=700, node_color='lightblue', arrows=True)
+nx.draw_networkx_edge_labels(H, Pos, edge_labels=edge_labels)
 
-#plt.show()
+plt.show()
 
 
-Solve_single(H,'s','t')
+B = nx.DiGraph()
+B.add_weighted_edges_from([
+    (0,1,3),
+    (1,2,2)])
+
+layers = [[0],[1],[2]]
+Pos = {}
+for i, layer in enumerate(layers):
+    n = len(layers)
+    for j, node in enumerate(layer):
+        Pos[node] = (i,-j)
+
+edge_labels = nx.get_edge_attributes(B,'weight')
+
+
+nx.draw(B, Pos, with_labels=True, node_size=700, node_color='lightblue', arrows=True)
+nx.draw_networkx_edge_labels(B, Pos, edge_labels=edge_labels)
+
+plt.show()
+
+
+Solve_single(B,0,1)
