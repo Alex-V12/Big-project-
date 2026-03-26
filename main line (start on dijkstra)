@@ -270,8 +270,8 @@ def Find_BN(G,s,t):
      #                     if isinstance(Improvments[j][k],int):
      #                         Improvments[j][k] += result[0] 
 
-#  if BREAK == {inf}:
-#    return [{attempt_1[0]}, 'No bottle necks found']  
+  if BREAK == {inf}:
+    return [{attempt_1[0]}, 'No bottle necks found']  
 
   return Improvments
 
@@ -369,7 +369,7 @@ plt.show()
 H = nx.DiGraph()
 
 edges = [
-('s','a',9), ('s','e',8), ('s','i',7), ('s','m',3),
+('s','a',9), ('s','e',8), ('s','i',2), ('s','m',3),
 
 ('a','b',2), ('a','n',6),
 ('b','e',4), ('b','g',3), ('b','c',6),
@@ -409,10 +409,10 @@ plt.show()
 
 simple = nx.DiGraph()
 simple.add_weighted_edges_from([
-    (0,1,3),
-    (1,2,2)])
+    (0,1,2),(0,2,1),
+    (2,3,2),(1,3,2)  ])
 
-layers = [[0],[1],[2]]
+layers = [[None,0,None],[1,None,2],[None,3,None]]
 Pos = {}
 for i, layer in enumerate(layers):
     n = len(layers)
@@ -430,7 +430,8 @@ plt.show()
 
 # EXAMPLES
 
-#Solve_single(simple,0,2)
+#Solve_single(simple,0,3)
+#Solve_multi(simple,0,3)
 #Solve_multi(H,'s','t')
 
 #Solve_single(H,{'s','c'},'t')
