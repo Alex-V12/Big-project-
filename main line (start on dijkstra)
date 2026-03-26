@@ -270,8 +270,8 @@ def Find_BN(G,s,t):
      #                     if isinstance(Improvments[j][k],int):
      #                         Improvments[j][k] += result[0] 
 
-  if BREAK == {inf}:
-    return [{attempt_1[0]}, 'No bottle necks found']  
+#  if BREAK == {inf}:
+#    return [{attempt_1[0]}, 'No bottle necks found']  
 
   return Improvments
 
@@ -360,7 +360,7 @@ edge_labels = nx.get_edge_attributes(Breaker,'weight')
 
 nx.draw(Breaker, Pos, with_labels=True, node_size=700, node_color='lightblue', arrows=True)
 nx.draw_networkx_edge_labels(Breaker, Pos, edge_labels=edge_labels)
-
+plt.title('Breaker')
 plt.show()
 
 
@@ -403,12 +403,12 @@ edge_labels = nx.get_edge_attributes(H,'weight')
 
 nx.draw(H, Pos, with_labels=True, node_size=700, node_color='lightblue', arrows=True)
 nx.draw_networkx_edge_labels(H, Pos, edge_labels=edge_labels)
-
+plt.title('H')
 plt.show()
 
 
-B = nx.DiGraph()
-B.add_weighted_edges_from([
+simple = nx.DiGraph()
+simple.add_weighted_edges_from([
     (0,1,3),
     (1,2,2)])
 
@@ -419,14 +419,22 @@ for i, layer in enumerate(layers):
     for j, node in enumerate(layer):
         Pos[node] = (i,-j)
 
-edge_labels = nx.get_edge_attributes(B,'weight')
+edge_labels = nx.get_edge_attributes(simple,'weight')
 
 
-nx.draw(B, Pos, with_labels=True, node_size=700, node_color='lightblue', arrows=True)
-nx.draw_networkx_edge_labels(B, Pos, edge_labels=edge_labels)
+nx.draw(simple, Pos, with_labels=True, node_size=700, node_color='lightblue', arrows=True)
+nx.draw_networkx_edge_labels(simple, Pos, edge_labels=edge_labels)
+plt.title('simple')
 
 plt.show()
 
 # EXAMPLES
-#Solve_single(B,0,1)
+
+#Solve_single(simple,0,2)
 #Solve_multi(H,'s','t')
+
+#Solve_single(H,{'s','c'},'t')
+#Solve_multi(H,'s',{'t','f'})
+
+#Max_flow(Breaker,'s','t')
+
